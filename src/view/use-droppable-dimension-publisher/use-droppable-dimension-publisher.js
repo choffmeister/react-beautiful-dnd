@@ -220,9 +220,13 @@ export default function useDroppableDimensionPublisher(args: Props) {
     const closest: ?Element = getClosestScrollableFromDrag(dragging);
     invariant(closest, 'Cannot scroll a droppable with no closest scrollable');
 
-    // act
-    closest.scrollTop += change.y;
-    closest.scrollLeft += change.x;
+    // defer to allow the user to manually controll the scroll position inside
+    // the onscroll event handler of the closest scrollable
+    window.setTimeout(() => {
+      // act
+      closest.scrollTop += change.y;
+      closest.scrollLeft += change.x;
+    }, 0)
   }, []);
 
   const callbacks: DroppableCallbacks = useMemo(() => {
